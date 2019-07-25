@@ -46,6 +46,7 @@ Bundle 'mattn/emmet-vim'
 Bundle 'dietsche/vim-lastplace'
 Bundle 'bling/vim-airline'
 Bundle 'godlygeek/tabular'
+Bundle 'mileszs/ack.vim'
 
 Bundle 'scrooloose/syntastic'
 Bundle 'plasticboy/vim-markdown'
@@ -56,20 +57,26 @@ Bundle 'SirVer/ultisnips'
 Bundle 'honza/vim-snippets'
 Bundle 'CharlesGueunet/quickmenu.vim'
 Bundle 'tpope/vim-fugitive'
+Bundle 'zxqfl/tabnine-vim'
+Bundle 'tacahiroy/ctrlp-funky'
+Bundle 'posva/vim-vue'
+Bundle 'OrangeT/vim-csharp'
 
 Bundle 'Yggdroot/indentLine'
-
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'petelewis/vim-evolution'
 Bundle 'jdkanani/vim-material-theme'
 Bundle 'liuchengxu/space-vim-dark'
 Bundle 'nanotech/jellybeans.vim'
-Bundle 'tacahiroy/ctrlp-funky'
+Bundle 'sainnhe/vim-color-forest-night'
 Bundle 'ryanoasis/vim-devicons'
 
-Bundle 'zxqfl/tabnine-vim'
-
 filetype plugin indent on
+
+" ack
+if executable('ag')
+    let g:ackprg = 'ag --nogroup --nocolor --column'
+endif
 
 " ultisnips
 let g:UltiSnipsExpandTrigger="<c-e>"
@@ -104,6 +111,9 @@ set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe
 let g:ctrlp_show_hidden = 1
 nnoremap <Leader>u :CtrlPFunky<Cr>
 let g:ctrlp_funky_syntax_highlight = 1
+if executable('ag')
+    let g:ctrlp_user_command = 'ag %s -l -U --nocolor -g ""'
+endif
 nmap <F3> :CtrlPMRUFiles<CR>
 nmap <F4> :CtrlPBuffer<CR>
 
@@ -136,13 +146,13 @@ nmap <C-S-tab> :bp<cr>
 
 "airline
 let g:airline#extensions#tabline#enabled = 1
-"let g:airline#extensions#tabline#left_sep = "\uE0B0"
-let g:airline#extensions#tabline#left_sep = ">"
+let g:airline#extensions#tabline#left_sep = "\uE0B0"
+"let g:airline#extensions#tabline#left_sep = ">"
 let g:airline_theme='bubblegum'
 let g:airline#extensions#tabline#buffer_idx_mode = 1
 
-"let g:airline_left_sep = "\uE0B0"
-"let g:airline_right_sep = "\uE0B2"
+let g:airline_left_sep = "\uE0B0"
+let g:airline_right_sep = "\uE0B2"
 
 nmap <leader>1 <Plug>AirlineSelectTab1
 nmap <leader>2 <Plug>AirlineSelectTab2
@@ -169,15 +179,23 @@ function! AccentDemo()
 endfunction
 autocmd VimEnter * call AccentDemo()
 
+if !exists('*RefreshIcon')
+    function! RefreshIcon()
+        call g:quickmenu#reset()
+        source $VIM/_vimrc
+    endfunction
+    nmap <F5> :call RefreshIcon()<CR>
+endif
+
 
 if has("gui_running")
     set encoding=utf-8
     set fileencodings=utf-8,chinese,latin-1
-    if has("win32")
-        set fileencoding=chinese
-    else
-        set fileencoding=utf-8
-    endif
+    "if has("win32")
+    "    set fileencoding=utf-8 "chinese
+    "else
+    set fileencoding=utf-8
+    "endif
     let &termencoding=&encoding
     source $VIMRUNTIME/delmenu.vim
     source $VIMRUNTIME/menu.vim
@@ -188,3 +206,4 @@ endif
 set background=dark
 "colorscheme material-theme
 colorscheme space-vim-dark
+
